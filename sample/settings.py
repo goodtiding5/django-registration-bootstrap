@@ -1,9 +1,7 @@
-# Django settings for contato_ajax project.
-from os.path import abspath, basename, dirname, join, normpath
-from os import environ
-from sys import path
+# Django settings for sample project.
+import os
 
-DJANGO_ROOT = dirname(abspath(__file__))
+PROJDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -16,28 +14,29 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'sample.bd',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(PROJDIR, 'sample.db'),
+        # The following settings are not used with sqlite3:
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
+# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Sao_Paulo'
+TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'pt-br'
+LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
@@ -53,22 +52,22 @@ USE_L10N = True
 USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = normpath(join(DJANGO_ROOT, 'media'))
+# Example: "/var/www/example.com/media/"
+MEDIA_ROOT = os.path.join(PROJDIR, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
-# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
+# Examples: "http://example.com/media/", "http://media.example.com/"
 MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = normpath(join(DJANGO_ROOT, 'static'))
+# Example: "/var/www/example.com/static/"
+STATIC_ROOT = os.path.join(PROJDIR, 'static')
 
 # URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
+# Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
 
 # Additional locations of static files
@@ -76,7 +75,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    normpath(join(DJANGO_ROOT, 'assets')),
+    os.path.join(PROJDIR, 'asset'),
 )
 
 # List of finder classes that know how to find static files in
@@ -88,7 +87,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'enmw2os@xght1qly@cvq1q-v5m)yonp*7#0kc&4onikwc@4sw4'
+SECRET_KEY = 'te&vkc%=95q@=a3fu#&=(7=xdrfadcz6=-fe$t%-mvjk%wdwj*'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -104,8 +103,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
-
-    # my
     'sample.context_processor.default',
 )
 
@@ -117,6 +114,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Uncomment the next line to enable django debug toolbar:
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'sample.urls'
@@ -125,20 +124,27 @@ ROOT_URLCONF = 'sample.urls'
 WSGI_APPLICATION = 'sample.wsgi.application'
 
 TEMPLATE_DIRS = (
-    normpath(join(dirname(DJANGO_ROOT), 'templates')),
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJDIR, 'templates'),
 )
 
 INSTALLED_APPS = (
+    'auth',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    'django.contrib.admindocs',
+    # 'django.contrib.admindocs',
+    # Uncomment the next line to enable django debug toolbar app:
+    # 'debug_toolbar',
+    'bootstrapform',
+    'sample',
 )
 
 #settings for registration work
@@ -147,8 +153,22 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'user@gmail.com'
 EMAIL_HOST_PASSWORD = 'pass'
+
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/login/'
+LOGIN_URL = '/auth/login/'
+LOGOUT_URL = '/auth/logout/'
+
+# debug_toolbar settings
+def custom_show_toolbar(request):
+    return True  # Always show toolbar, for example purposes only.
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
+    'HIDE_DJANGO_SQL': False,
+    'TAG': 'div',
+    'ENABLE_STACKTRACES' : True,
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

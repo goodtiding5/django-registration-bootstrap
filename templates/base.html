@@ -3,10 +3,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
+    <title>{% block title %}Bootstrap, from Twitter{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="{% block description %}{% endblock %}">
+    <meta name="author" content="{% block author %}{% endblock %}">
     <!-- Le styles -->
     <link rel="shortcut icon" href="http://twitter.github.com/bootstrap/assets/ico/favicon.ico">
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
@@ -29,52 +29,61 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <a class="brand" href="{% url index %}">{{ site.name }}</a>
+		<div class="brand">
+		    {% block branding %}
+                    <a href="{% url 'index' %}">{{ site.name }}</a>
+		    {% endblock %}
+		</div>
+
                 <div class="nav-collapse collapse navbar-responsive-collapse">
+		    {% block navigation %}
                     <ul class="nav">
-                        <li class="active"><a href="{% url index %}">{% trans "Home" %}</a></li>
+                        <li class="active"><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
                         <li><a href="http://www.amazingworks.com.br">{% trans "About" %}</a></li>
                         <li><a href="mailto:ebertti@gmail.com">{% trans "Contact" %}</a></li>
                     </ul>
                     
                     {% if user.is_authenticated %}
-                        <ul class="nav pull-right">
-                            <span class="label label-inverse">{% trans 'Hello' %} {{ user.username }},</span>
-                            <li class="divider-vertical"></li>
-                            <a href="{% url django.contrib.auth.views.password_change %}">{% trans "Change password" %}</a>
-                            <a class="btn btn-inverse" href="{% url django.contrib.auth.views.logout %}">{% trans 'Leave' %}</a>
-                        </ul>
+                    <ul class="nav pull-right">
+                        <span class="label label-inverse">{% trans 'Hello' %} {{ user.username }},</span>
+                        <li class="divider-vertical"></li>
+                        <a href="{% url 'django.contrib.auth.views.password_change' %}">{% trans "Change password" %}</a>
+                        <a class="btn btn-inverse" href="{% url 'django.contrib.auth.views.logout' %}">{% trans 'Leave' %}</a>
+                    </ul>
 
                     {% else %}
-                    <form class="navbar-form pull-right" action="{% url django.contrib.auth.views.login %}" method="post">
+                    <form class="navbar-form pull-right" action="{% url 'django.contrib.auth.views.login' %}" method="post">
                         {% csrf_token %}
                         <input type="text" class="input-small" id="id_username" placeholder="{% trans 'Username' %}">
                         <input type="password" class="input-small" id="id_password" placeholder="{% trans 'Password' %}">
                         <button type="submit" class="btn">{% trans 'Log in' %}</button>
                     </form>
                     {% endif %}
+		    {% endblock %} <!-- end of navigation block -->
                 </div><!-- /.nav-collapse -->
             </div>
         </div><!-- /navbar-inner -->
     </div>
 
     <div class="container">
-    {% block container %}
+        {% block container %}
         <div class="content">
             <div class="page-header">
                 <h1>{{ site.name }} <small>{% trans "Sample using Bootstrap from Twitter with django-registration" %}</small></h1>
             </div>
             <ul>
-                <li><a href="{% url django.contrib.auth.views.login %}">{% trans "Log in" %}</a></li>
-                <li><a href="{% url django.contrib.auth.views.logout %}">{% trans "Log out" %}</a></li>
-                <li><a href="{% url django.contrib.auth.views.password_change %}">{% trans "Change password" %}</a></li>
-                <li><a href="{% url django.contrib.auth.views.password_reset %}">{% trans "Reset my password" %}</a></li>
+                <li><a href="{% url 'django.contrib.auth.views.login' %}">{% trans "Log in" %}</a></li>
+                <li><a href="{% url 'django.contrib.auth.views.logout' %}">{% trans "Log out" %}</a></li>
+                <li><a href="{% url 'django.contrib.auth.views.password_change' %}">{% trans "Change password" %}</a></li>
+                <li><a href="{% url 'django.contrib.auth.views.password_reset' %}">{% trans "Reset my password" %}</a></li>
             </ul>
         </div>
-    {% endblock %}
+	{% endblock %}
     <hr>
     <footer>
+        {% block footer %}
         <p>By <a href="mailto:ebertti@gmail.com">Ezequiel Bertti</a> &copy; <a href='http://www.amazingworks.com.br'>AmazingWorks</a> 2011</p>
+	{% endblock %}
     </footer>
     </div> <!-- /container -->
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -84,6 +93,5 @@
     <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
     <script src="{{ STATIC_URL }}js/prettify.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-
   </body>
 </html>
