@@ -1,0 +1,4 @@
+Django==1.5
+debug_toolbar
+-e git://github.com/goodtiding5/django-bootstrap-form.git@4877ea701c66a51540542a0c2ed296d78145173c#egg=django_bootstrap_form
+
